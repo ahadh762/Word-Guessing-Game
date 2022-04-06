@@ -2,8 +2,12 @@ import random
 
 play_game = True
 previous_words = set()
+Wins = 0
+Losses = 0
 
 while play_game == True:
+    print(f"Wins: {Wins}\nLosses: {Losses}")
+    print()
     f = open('words_alpha.txt')
     dict_lines = f.read().splitlines()
     f.close()
@@ -61,7 +65,7 @@ while play_game == True:
                 guess = input('Guess a word: ').lower()
                 print()
                 valid_word = guess in dictionary_set
-            return guess
+            return guess, choice
         else:
             guess = input("Guess a letter: ").lower()
             print()
@@ -71,21 +75,24 @@ while play_game == True:
                 guess = input('Guess a letter: ').lower()
                 print()
                 valid_letter = guess.isalpha()
-            return guess
+            return guess, choice
 
 
-    def Update_Board(guess):
+    def Update_Board(guess, choice):
 
         global number_of_guesses
         global list_of_letters
         global correct_word
+        global Wins
+        global Losses
 
-        if len(guess) > 1:
+        if choice == 0:
             if guess == correct_word:
                 list_of_letters = list(correct_word)
                 print("You win!\n")
                 print("The word was \n")
                 number_of_guesses = 0
+                Wins+=1
             else:
                 print("Incorrect! You lose a guess!\n")
                 number_of_guesses = number_of_guesses - 1
@@ -97,6 +104,7 @@ while play_game == True:
                     list_of_letters = list(correct_word)
                     print("You are out of guesses! You lose!\n")
                     print(f"The word was \n")
+                    Losses+=1
         else:
             if any(letter in correct_word for letter in guess):
                 print("Correct!\n")
@@ -114,16 +122,17 @@ while play_game == True:
                     print("You are out of guesses! You lose!\n")
                     print(f"The word was \n")
                     list_of_letters = list(correct_word)
+                    Losses+=1
 
         print(' '.join(list_of_letters))
         print()
 
         while number_of_guesses != 0:
-            Guess = Validate_Guess(Guess_Choice())
-            Update_Board(Guess)
+            Guess, Choice = Validate_Guess(Guess_Choice())
+            Update_Board(Guess, Choice)
 
-    Guess = Validate_Guess(Guess_Choice())
-    Update_Board(Guess)
+    Guess, Choice = Validate_Guess(Guess_Choice())
+    Update_Board(Guess, Choice)
 
     if number_of_guesses == 0:
         play_again = input("Do you want to play again? (y/n): ").lower()
@@ -137,3 +146,5 @@ while play_game == True:
         else:
             play_game = False
             print("Thank you for playing!\n")
+            print(f"Wins: {Wins}\nLosses: {Losses}")
+            print()
