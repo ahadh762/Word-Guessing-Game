@@ -1,27 +1,39 @@
-from PyDictionary import PyDictionary
-from numpy import number
-dictionary = PyDictionary()
+import random
 
-correct_word = "champion".lower()
+
+f = open('words_alpha.txt')
+dict_lines = f.read().splitlines()
+f.close()
+
+dictionary_set = set()
+
+for line in dict_lines:
+    dictionary_set.add(line)
+
+correct_word = random.choice(tuple(dictionary_set))
 number_of_guesses = 7
 list_of_letters = []
 
 for letter in correct_word:
-    list_of_letters.append("_")
+    if letter.isalpha():
+        list_of_letters.append("_")
+    else:
+        list_of_letters.append(letter)
 
 print(' '.join(list_of_letters), end = "\n\n" )
 
 
 def Guess_Choice():
-    guess_choice = input('Do you want to guess a letter or a word?: ')
+
+    guess_choice = input('Do you want to guess a letter (L) or a word (W)?: ').lower()
     print()
     valid_choice = False
 
     while (valid_choice == False):
-        if guess_choice.lower() == "word":
+        if guess_choice == "word" or guess_choice == "w":
             valid_choice = True
             guess_choice = 0
-        elif guess_choice.lower() == "letter":
+        elif guess_choice.lower() == "letter" or guess_choice == "l":
             valid_choice = True
             guess_choice = 1
         else:
@@ -35,11 +47,11 @@ def Validate_Guess(choice):
     if choice == 0:
         guess = input("Guess a word: ").lower()
         print()
-        valid_word = bool(dictionary.meaning(guess, True))
+        valid_word = guess in dictionary_set
         while valid_word == False:
             guess = input("Invalid input. Guess a word: ").lower()
             print()
-            valid_word = bool(dictionary.meaning(guess,True))
+            valid_word = guess in dictionary_set
         return guess
     else:
         guess = input("Guess a letter: ").lower()
@@ -53,6 +65,7 @@ def Validate_Guess(choice):
 
 
 def Update_Board(guess):
+
     global number_of_guesses
     global list_of_letters
     global correct_word
