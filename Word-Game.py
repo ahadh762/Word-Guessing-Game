@@ -196,9 +196,7 @@ while play_game == True:
             print(f'Invalid input: "{play_again}".', end = ' ')
             play_again = input("Do you want to play again? (y/n): ").lower()
             print()
-        if play_again == 'y':
-            continue
-        else:
+        if play_again == 'n' or play_again == 'no':
             play_game = False
             print("Thank you for playing!\n")
             print(f"Wins: {Wins}\nLosses: {Losses}")
